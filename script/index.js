@@ -4,6 +4,7 @@ const loadLessons = () => {
         .then((res) => res.json())
         .then((json) => displayLesson(json.data));
 }
+
 // step-5
 const removeActive = () => {
     const lessonbtons = document.querySelectorAll(".lesson-btn")
@@ -21,6 +22,38 @@ const loadLevelWord = (id) => {
             clickBtn.classList.add("active")
             wordDisplay(card.data)
         });
+}
+
+// step-6
+const loadWordDetils = async (id) => {
+    const url = `https://openapi.programming-hero.com/api/word/${id}`
+    const res = await fetch(url)
+    const detils = await res.json();
+    detilsDisplay(detils.data);
+}
+
+// step-7
+const detilsDisplay = (word) => {
+    console.log(word);
+    const detilsBox = document.getElementById("detils-container")
+    detilsBox.innerHTML = `
+    <h2 class="font-bangla text-2xl font-bold">${word.word} (<i class="fa-solid fa-microphone-lines"></i>:ইগার)</h2>
+                <div>
+                    <h2 class="text-1xl font-semibold">${word.meaning}</h2>
+                    <p class="font-bangla text-[#79716B]">${word.pronunciation}</p>
+                </div>
+                <div>
+                    <h2 class="text-1xl font-semibold">Example</h2>
+                    <p class="text-[#79716B]">${word.sentence}</p>
+                </div>
+                <div>
+                    <h2 class="font-bangla text-1xl font-semibold">সমার্থক শব্দ গুলো</h2>
+                    <span class="btn">Enthusiastic</span>
+                    <span class="btn">excited</span>
+                    <span class="btn">keen</span>
+                </div>
+    `
+    document.getElementById("word_modal").showModal()
 }
 
 
@@ -47,7 +80,7 @@ const wordDisplay = (words) => {
             <p class="text-xl text-[#000000] ">Meaning/Pronounciation</p>
             <h3 class="font-bangla text-[#383838] text-2xl font-semibold mb-15">"${word.meaning ? word.meaning : "Meaning not find"} / ${word.pronunciation ? word.pronunciation : "Pronunciation not find"}"</h3>
             <div class="flex justify-between">
-                <button class="btn bg-[#1A91FF30]"><i class="fa-solid text-[#000000] fa-circle-info"></i></button>
+                <button onclick="loadWordDetils(${word.id})" class="btn bg-[#1A91FF30]"><i class="fa-solid text-[#000000] fa-circle-info"></i></button>
                 <button class="btn bg-[#1A91FF30]"><i class="fa-solid text-[#000000] fa-volume-high"></i></button>
             </div>
         </div>
